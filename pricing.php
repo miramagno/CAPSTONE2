@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Query to get data from the dataset table
-$sqlDataset = "SELECT productID, productName, currentStockLevel, expirationDate, restockDate, originalPrice	, discountPrice 
+$sqlDataset = "SELECT productID, productName, currentStockLevel, expirationDate, restockDate, originalPrice, discountPrice, pricingPromotion 
                FROM dataset";
 $resultDataset = $conn->query($sqlDataset);
 
@@ -259,7 +259,7 @@ $conn->close();
                         <td><?php echo $item['productName']; ?></td>
                         <td>₱<?php echo number_format($item['originalPrice'], 2); ?></td>
                         <td>₱<?php echo number_format($item['discountPrice'], 2); ?></td>
-                        <td>+10x% </td> <!-- Example expected revenue, you can adjust this if needed -->
+                        <td><?php echo $item['pricingPromotion']; ?></td> <!-- Example expected revenue, you can adjust this if needed -->
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -289,7 +289,7 @@ $conn->close();
                         <td><?php echo $item['productID']; ?></td>
                         <td><?php echo $item['productName']; ?></td>
                         <td><?php echo date("m/d/Y", strtotime($item['expirationDate'])); ?></td>
-                        <td><?php echo $item['discount'] . '%'; ?></td>
+                        <td><?php echo $item['pricingPromotion']; ?></td>
                         <td><?php echo $item['promotionRecommendation']; ?></td>
                         <td>
                             <span class="badge <?php echo ($item['promotionStatus'] === 'Active') ? 'bg-success' : 'bg-warning'; ?>">
