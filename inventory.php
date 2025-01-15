@@ -234,32 +234,53 @@ $conn->close();
       </div>
       <!-- loraine style-->
       <div class="container mt-4">
-        <div class="row">
-          <!-- Left Column: Stock Level Chart -->
-          <div class="col-12 col-md-6">
-            <div class="chart-container" style="width: 100%; margin: 0 auto;">
-              <h5 class="text-center">Stock Level Monitoring</h5>
-              <canvas id="stockLevelChart" style="max-width: 100%;"></canvas>
-            </div>
-          </div>
-
-          <!-- Right Column: Low Stock Alerts and Inventory Snapshot -->
-          <div class="col-12 col-md-6">
-            <div class="card mb-4">
-              <div class="chart-container" style="width: 100%; margin: 0 auto;">
-                <h5 class="text-center">Inventory Snapshot</h5>
-                <canvas id="inventorySnapshotChart" style="width: 50px; height: 50px;"></canvas>
-                <!-- Adjust height as needed -->
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-center">Low Stock Alerts</h5>
-                <ul class="list-group" id="lowStockAlerts">
-                  <li class="list-group-item">No low stock items</li>
-                </ul>
-              </div>
-            </div>
+  <div class="row">
+    <!-- Left Column: Stock Level Chart -->
+    <div class="col-12 col-md-8">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Stock Level Monitoring</h5>
+          <!-- "No data available" message -->
+          <p id="stockLevelNoDataMessage" style="text-align: center; color: #888; margin: 10px 0;">
+            No data available yet
+          </p>
+          <div class="chart-container" style="width: 100%; margin: 0 auto; display: none;" id="stockLevelChartContainer">
+            <canvas id="stockLevelChart" style="max-width: 100%;"></canvas> <!-- Initially hidden -->
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Low Stock Alerts and Inventory Snapshot -->
+    <div class="col-12 col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title text-center">Inventory Snapshot</h5>
+          <!-- "No data available" message -->
+          <p id="inventorySnapshotNoDataMessage" style="text-align: center; color: #888; margin: 10px 0;">
+            No data available yet
+          </p>
+          
+          <!-- Chart container with fixed size for small chart -->
+          <div class="chart-container" style="width: 100%; height: 200px; margin: 0 auto; display: none;" id="inventorySnapshotChartContainer">
+            <canvas id="inventorySnapshotChart" style="max-width: 100%; max-height: 100%;"></canvas>
+          </div>
+        </div>
+
+        <!-- Visual Partition (using border and padding) -->
+        <div class="partition" id="lowStockAlertsSection" style="border-top: 2px solid #f1f1f1; margin: 15px 0; padding-top: 15px; display: none;">
+  <div class="card-body">
+    <h5 class="card-title text-center">Low Stock Alerts</h5>
+    <ul class="list-group" id="lowStockAlerts" style="display: none;">
+      <li class="list-group-item text-center">No low stock items</li>
+    </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script>
 document.getElementById('uploadStockDataButton').addEventListener('click', function () {
@@ -310,7 +331,7 @@ function parseStockCSV(csv) {
       if (!isNaN(reorderPoint)) {
         data.reorderPoints.push(reorderPoint);
         if (stockLevel < reorderPoint) {
-          data.lowStockItems.push(`${columns[1]} (Stock: ${stockLevel}, Reorder Point: ${reorderPoint})`);
+          data.lowStockItems.push(${columns[1]} (Stock: ${stockLevel}, Reorder Point: ${reorderPoint}));
           data.low++;
         } else if (stockLevel <= reorderPoint * 2) {
           data.optimal++;
